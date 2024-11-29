@@ -1,69 +1,140 @@
 'use client';
 
 import { useConversation } from '@11labs/react';
-import { useCallback } from 'react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Mic, MicOff, Loader2 } from 'lucide-react';
+import { VoiceWave } from './voice-wave';
 
 export function Conversation() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const conversation = useConversation({
-    onConnect: () => console.log('Connected'),
-    onDisconnect: () => console.log('Disconnected'),
-    onMessage: (message) => console.log('Message:', message),
-    onError: (error) => console.error('Error:', error),
+    onConnect: () => {
+      console.log('Connected to ElevenLabs');
+      setIsLoading(false);
+      setError(null);
+    },
+    onDisconnect: () => {
+      console.log('Disconnected from ElevenLabs');
+      setIsLoading(false);
+      setError(null);
+    },
+    onMessage: (message) => {
+      console.log('Received message:', message);
+    },
+    onError: (err) => {
+      console.error('Error:', err);
+      setError(typeof err === 'string' ? err : 'Connection error occurred');
+      setIsLoading(false);
+    },
   });
 
-  const getSignedUrl = async (): Promise<string> => {
-    const response = await fetch("/api/get-signed-url");
-    if (!response.ok) {
-      throw new Error(`Failed to get signed url: ${response.statusText}`);
-    }
-    const { signedUrl } = await response.json();
-    return signedUrl;
-  };
-
-  const startConversation = useCallback(async () => {
+  const startConversation = async () => {
+    setIsLoading(true);
+    setError(null);
+    console.log('Starting conversation...');
+    
     try {
       // Request microphone permission
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log('Microphone access granted');
 
+      // Get signed URL
+      const response = await fetch('/api/get-signed-url');
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get connection URL');
+      }
 
-      const signedUrl = await getSignedUrl();
-      // Start the conversation with your agent
+      console.log('Starting session...');
       await conversation.startSession({
-        signedUrl, // Replace with your agent ID
+        signedUrl: data.signedUrl,
       });
-
+      
     } catch (error) {
       console.error('Failed to start conversation:', error);
+      setError(error instanceof Error ? error.message : 'Failed to start conversation');
+      setIsLoading(false);
     }
-  }, [conversation]);
+  };
 
-  const stopConversation = useCallback(async () => {
-    await conversation.endSession();
-  }, [conversation]);
+  const stopConversation = async () => {
+    setIsLoading(true);
+    try {
+      await conversation.endSession();
+    } catch (error) {
+      console.error('Failed to stop conversation:', error);
+      setError(error instanceof Error ? error.message : 'Failed to stop conversation');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const isConnected = conversation.status === 'connected';
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="flex gap-2">
-        <button
-          onClick={startConversation}
-          disabled={conversation.status === 'connected'}
-          className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-        >
-          Start Conversation
-        </button>
-        <button
-          onClick={stopConversation}
-          disabled={conversation.status !== 'connected'}
-          className="px-4 py-2 bg-red-500 text-white rounded disabled:bg-gray-300"
-        >
-          Stop Conversation
-        </button>
-      </div>
+    <Card className="w-full shadow-lg">
+      <CardContent className="p-6">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            {/* Background pulse effect */}
+            <div
+              className={`absolute inset-0 rounded-full transition-all duration-500 ${
+                isConnected
+                  ? 'bg-green-500/20 animate-pulse scale-110'
+                  : 'bg-slate-100 scale-100'
+              }`}
+            />
+            
+            {/* Button */}
+            <Button
+              onClick={isConnected ? stopConversation : startConversation}
+              disabled={isLoading}
+              className={`
+                h-16 w-16 rounded-full 
+                relative z-10
+                transition-transform
+                hover:scale-105
+                active:scale-95
+              `}
+              variant={isConnected ? "destructive" : "default"}
+            >
+              {isLoading ? (
+                <Loader2 className="h-6 w-6 animate-spin" />
+              ) : isConnected ? (
+                <MicOff className="h-6 w-6" />
+              ) : (
+                <Mic className="h-6 w-6" />
+              )}
+            </Button>
+          </div>
 
-      <div className="flex flex-col items-center">
-        <p>Status: {conversation.status}</p>
-        <p>Agent is {conversation.isSpeaking ? 'speaking' : 'listening'}</p>
-      </div>
-    </div>
+          {/* Voice wave animation */}
+          <VoiceWave isActive={isConnected && !conversation.isSpeaking} />
+
+          {/* Status text */}
+          <p className="text-sm text-center font-medium">
+            {isLoading 
+              ? 'Connecting...' 
+              : isConnected
+                ? conversation.isSpeaking
+                  ? 'Assistant is speaking...'
+                  : 'Listening to you...'
+                : 'Click to start conversation'}
+          </p>
+
+          {/* Error message */}
+          {error && (
+            <p className="text-sm text-red-500 bg-red-50 px-4 py-2 rounded-md">
+              {error}
+            </p>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
