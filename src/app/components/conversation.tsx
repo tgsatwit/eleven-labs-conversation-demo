@@ -7,9 +7,22 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Mic, MicOff, Loader2 } from 'lucide-react';
 import { VoiceWave } from './voice-wave';
 
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+}
+
+// Updated interface to match the expected format
+interface ConversationMessage {
+  message: string;
+  source: 'user' | 'ai';
+}
+
 export function Conversation() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const conversation = useConversation({
     onConnect: () => {
@@ -22,14 +35,27 @@ export function Conversation() {
       setIsLoading(false);
       setError(null);
     },
-    onMessage: (message) => {
-      console.log('Received message:', message);
+    onMessage: (props: { message: string; source: 'user' | 'ai' }) => {
+      console.log('Received message:', props);
+      setMessages(prev => [...prev, {
+        role: props.source === 'ai' ? 'assistant' : 'user',
+        content: props.message,
+        timestamp: new Date()
+      }]);
     },
-    onError: (err) => {
+    onError: (err: unknown) => {
       console.error('Error:', err);
       setError(typeof err === 'string' ? err : 'Connection error occurred');
       setIsLoading(false);
     },
+    onUserInput: (text: string) => {
+      console.log('User input:', text);
+      setMessages(prev => [...prev, {
+        role: 'user',
+        content: text,
+        timestamp: new Date()
+      }]);
+    }
   });
 
   const startConversation = async () => {
@@ -77,47 +103,15 @@ export function Conversation() {
   const isConnected = conversation.status === 'connected';
 
   return (
-    <Card className="w-full shadow-lg">
-      <CardContent className="p-6">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            {/* Background pulse effect */}
-            <div
-              className={`absolute inset-0 rounded-full transition-all duration-500 ${
-                isConnected
-                  ? 'bg-green-500/20 animate-pulse scale-110'
-                  : 'bg-slate-100 scale-100'
-              }`}
-            />
-            
-            {/* Button */}
-            <Button
-              onClick={isConnected ? stopConversation : startConversation}
-              disabled={isLoading}
-              className={`
-                h-16 w-16 rounded-full 
-                relative z-10
-                transition-transform
-                hover:scale-105
-                active:scale-95
-              `}
-              variant={isConnected ? "destructive" : "default"}
-            >
-              {isLoading ? (
-                <Loader2 className="h-6 w-6 animate-spin" />
-              ) : isConnected ? (
-                <MicOff className="h-6 w-6" />
-              ) : (
-                <Mic className="h-6 w-6" />
-              )}
-            </Button>
-          </div>
-
-          {/* Voice wave animation */}
+    <div className="flex-1 flex flex-col gap-4">
+      {/* Controls area */}
+      <div className="bg-[#1A1D1E] rounded-lg p-4">
+        <div className="flex flex-col items-center gap-3">
+          {/* Voice wave */}
           <VoiceWave isActive={isConnected && !conversation.isSpeaking} />
 
           {/* Status text */}
-          <p className="text-sm text-center font-medium">
+          <p className="text-sm text-gray-400">
             {isLoading 
               ? 'Connecting...' 
               : isConnected
@@ -129,12 +123,75 @@ export function Conversation() {
 
           {/* Error message */}
           {error && (
-            <p className="text-sm text-red-500 bg-red-50 px-4 py-2 rounded-md">
+            <p className="text-sm text-red-400 bg-red-900/20 px-4 py-2 rounded-md">
               {error}
             </p>
           )}
+
+          {/* Microphone button */}
+          <Button
+            onClick={isConnected ? stopConversation : startConversation}
+            disabled={isLoading}
+            className={`
+              h-14 w-14
+              rounded-full 
+              transition-all
+              duration-300
+              ${isConnected 
+                ? 'bg-red-500 hover:bg-red-600' 
+                : 'bg-[#2A2D2E] hover:bg-[#3A3D3E]'}
+            `}
+          >
+            {isLoading ? (
+              <Loader2 className="h-6 w-6 animate-spin" />
+            ) : isConnected ? (
+              <MicOff className="h-6 w-6" />
+            ) : (
+              <Mic className="h-6 w-6" />
+            )}
+          </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Transcript area */}
+      <div className="flex-1 min-h-[300px] bg-[#1A1D1E] rounded-lg p-4">
+        <h2 className="text-gray-400 mb-4">Transcript:</h2>
+        <div className="h-[calc(100%-2rem)] overflow-y-auto space-y-4">
+          {messages.length === 0 ? (
+            <p className="text-gray-500">
+              Start a conversation to see messages here
+            </p>
+          ) : (
+            messages.map((message, index) => (
+              <div
+                key={index}
+                className={`flex ${
+                  message.role === 'user' ? 'justify-end' : 'justify-start'
+                }`}
+              >
+                <div
+                  className={`
+                    max-w-[85%] sm:max-w-[80%] 
+                    px-4 py-2 
+                    rounded-lg
+                    text-sm
+                    ${
+                      message.role === 'user'
+                        ? 'bg-[#2A2D2E] text-white'
+                        : 'bg-[#1E2122] text-gray-200'
+                    }
+                  `}
+                >
+                  <p className="text-sm break-words">{message.content}</p>
+                  <p className="text-[10px] text-gray-400 mt-1">
+                    {message.timestamp.toLocaleTimeString()}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
