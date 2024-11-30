@@ -60,15 +60,16 @@ export default function Home() {
           </Button>
         </div>
 
-        {/* Try asking suggestions */}
+        {/* Try asking suggestions - Updated for Gestalt Language Coach context */}
         <div className="mb-4 sm:mb-6">
           <h2 className="text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3">Try asking:</h2>
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {[
-              "Tell me a joke",
-              "What's the weather like?",
-              "Set a timer for 5 minutes",
-              "Translate 'Hello' to Spanish"
+              "How can I simplify my phrases?",
+              "Tips for following my child's lead",
+              "Ways to encourage echoing",
+              "Strategies for play-based learning",
+              "How to pause effectively"
             ].map((suggestion) => (
               <button
                 key={suggestion}
