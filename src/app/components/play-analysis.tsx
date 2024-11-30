@@ -27,6 +27,8 @@ export function PlayAnalysis() {
   const [transcription, setTranscription] = useState<Transcription | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [liveTranscript, setLiveTranscript] = useState<string>('');
+  const [isRecording, setIsRecording] = useState(false);
 
   const handleSessionReady = async (file: File) => {
     setIsLoading(true);
@@ -88,6 +90,20 @@ export function PlayAnalysis() {
     }
   };
 
+  const handleTranscriptUpdate = (text: string, isComplete: boolean) => {
+    if (!isComplete) {
+      setLiveTranscript(prev => prev + ' ' + text);
+    }
+  };
+
+  const handleRecordingStateChange = (recording: boolean) => {
+    setIsRecording(recording);
+    if (!recording) {
+      // Clear live transcript when recording stops
+      setLiveTranscript('');
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col p-3 sm:p-4 lg:max-w-[800px]">
       {/* Header */}
@@ -105,9 +121,20 @@ export function PlayAnalysis() {
         <div className="bg-[#1A1D1E] rounded-lg p-4">
           <SessionInput 
             onSessionReady={handleSessionReady}
+            onTranscriptUpdate={handleTranscriptUpdate}
+            onRecordingStateChange={handleRecordingStateChange}
             isLoading={isLoading}
           />
         </div>
+
+        {isRecording && liveTranscript && (
+          <div className="flex-1 bg-[#1A1D1E] rounded-lg p-4">
+            <h2 className="text-gray-400 text-sm mb-3">Live Transcription:</h2>
+            <div className="text-sm text-gray-200">
+              {liveTranscript}
+            </div>
+          </div>
+        )}
 
         {/* Transcription Display */}
         {transcription && (
