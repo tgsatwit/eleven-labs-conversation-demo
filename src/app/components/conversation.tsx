@@ -1,9 +1,9 @@
 'use client';
 
 import { useConversation } from '@11labs/react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Mic, MicOff, Loader2 } from 'lucide-react';
+import { Mic, MicOff, Loader2, Copy, Check } from 'lucide-react';
 import { VoiceWave } from './voice-wave';
 
 interface ChatMessage {
@@ -13,34 +13,37 @@ interface ChatMessage {
 }
 
 export function Conversation() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [copiedMessageId, setCopiedMessageId] = useState<number | null>(null);
+
+  const copyToClipboard = async (text: string, messageId: number) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedMessageId(messageId);
+      setTimeout(() => setCopiedMessageId(null), 2000); // Reset after 2 seconds
+    } catch (err) {
+      console.error('Failed to copy text:', err);
+    }
+  };
 
   const conversation = useConversation({
-    onConnect: () => {
-      console.log('Connected to ElevenLabs');
-      setIsLoading(false);
-      setError(null);
+    onConnect: () => console.log('Connected'),
+    onDisconnect: () => console.log('Disconnected'),
+    onMessage: (message: any) => {
+      console.log('Received message:', message);
+      // Handle both message formats from the API
+      const messageText = message.message || message.text || '';
+      const source = message.source || 'ai';
+      
+      if (messageText) {
+        setMessages(prev => [...prev, {
+          role: source === 'ai' ? 'assistant' : 'user',
+          content: messageText,
+          timestamp: new Date()
+        }]);
+      }
     },
-    onDisconnect: () => {
-      console.log('Disconnected from ElevenLabs');
-      setIsLoading(false);
-      setError(null);
-    },
-    onMessage: (props: { message: string; source: 'user' | 'ai' }) => {
-      console.log('Received message:', props);
-      setMessages(prev => [...prev, {
-        role: props.source === 'ai' ? 'assistant' : 'user',
-        content: props.message,
-        timestamp: new Date()
-      }]);
-    },
-    onError: (err: unknown) => {
-      console.error('Error:', err);
-      setError(typeof err === 'string' ? err : 'Connection error occurred');
-      setIsLoading(false);
-    },
+    onError: (error: unknown) => console.error('Error:', error),
     onUserInput: (text: string) => {
       console.log('User input:', text);
       setMessages(prev => [...prev, {
@@ -51,47 +54,35 @@ export function Conversation() {
     }
   });
 
-  const startConversation = async () => {
-    setIsLoading(true);
-    setError(null);
-    console.log('Starting conversation...');
-    
+  const getSignedUrl = async (): Promise<string> => {
+    const response = await fetch("/api/get-signed-url");
+    if (!response.ok) {
+      throw new Error(`Failed to get signed url: ${response.statusText}`);
+    }
+    const { signedUrl } = await response.json();
+    return signedUrl;
+  };
+
+  const startConversation = useCallback(async () => {
     try {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      console.log('Microphone access granted');
 
-      // Get signed URL
-      const response = await fetch('/api/get-signed-url');
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to get connection URL');
-      }
+      const signedUrl = await getSignedUrl();
 
-      console.log('Starting session...');
+      // Start the conversation with your signed url
       await conversation.startSession({
-        signedUrl: data.signedUrl,
+        signedUrl,
       });
-      
+
     } catch (error) {
       console.error('Failed to start conversation:', error);
-      setError(error instanceof Error ? error.message : 'Failed to start conversation');
-      setIsLoading(false);
     }
-  };
+  }, [conversation]);
 
-  const stopConversation = async () => {
-    setIsLoading(true);
-    try {
-      await conversation.endSession();
-    } catch (error) {
-      console.error('Failed to stop conversation:', error);
-      setError(error instanceof Error ? error.message : 'Failed to stop conversation');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const stopConversation = useCallback(async () => {
+    await conversation.endSession();
+  }, [conversation]);
 
   const isConnected = conversation.status === 'connected';
 
@@ -100,31 +91,18 @@ export function Conversation() {
       {/* Controls area */}
       <div className="bg-[#1A1D1E] rounded-lg p-4">
         <div className="flex flex-col items-center gap-3">
-          {/* Voice wave */}
           <VoiceWave isActive={isConnected && !conversation.isSpeaking} />
 
-          {/* Status text */}
           <p className="text-sm text-gray-400">
-            {isLoading 
-              ? 'Connecting...' 
-              : isConnected
-                ? conversation.isSpeaking
-                  ? 'Assistant is speaking...'
-                  : 'Listening to you...'
-                : 'Click to start conversation'}
+            {isConnected 
+              ? conversation.isSpeaking
+                ? 'Assistant is speaking...'
+                : 'Listening to you...'
+              : 'Click to start conversation'}
           </p>
 
-          {/* Error message */}
-          {error && (
-            <p className="text-sm text-red-400 bg-red-900/20 px-4 py-2 rounded-md">
-              {error}
-            </p>
-          )}
-
-          {/* Microphone button */}
           <Button
             onClick={isConnected ? stopConversation : startConversation}
-            disabled={isLoading}
             className={`
               h-14 w-14
               rounded-full 
@@ -135,9 +113,7 @@ export function Conversation() {
                 : 'bg-[#2A2D2E] hover:bg-[#3A3D3E]'}
             `}
           >
-            {isLoading ? (
-              <Loader2 className="h-6 w-6 animate-spin" />
-            ) : isConnected ? (
+            {isConnected ? (
               <MicOff className="h-6 w-6" />
             ) : (
               <Mic className="h-6 w-6" />
@@ -168,6 +144,8 @@ export function Conversation() {
                     px-4 py-2 
                     rounded-lg
                     text-sm
+                    group
+                    relative
                     ${
                       message.role === 'user'
                         ? 'bg-[#2A2D2E] text-white'
@@ -175,10 +153,25 @@ export function Conversation() {
                     }
                   `}
                 >
-                  <p className="text-sm break-words">{message.content}</p>
-                  <p className="text-[10px] text-gray-400 mt-1">
-                    {message.timestamp.toLocaleTimeString()}
-                  </p>
+                  <p className="text-sm break-words pr-6">{message.content}</p>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-[10px] text-gray-400">
+                      {message.timestamp.toLocaleTimeString()}
+                    </p>
+                    {message.role === 'assistant' && (
+                      <button
+                        onClick={() => copyToClipboard(message.content, index)}
+                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        title="Copy response"
+                      >
+                        {copiedMessageId === index ? (
+                          <Check className="h-4 w-4 text-green-500" />
+                        ) : (
+                          <Copy className="h-4 w-4 text-gray-400 hover:text-white" />
+                        )}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))
