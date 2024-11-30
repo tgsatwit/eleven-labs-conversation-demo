@@ -21,7 +21,7 @@ interface TakeoutItem {
 }
 
 export default function Home() {
-  const [sessions, setSessions] = useState<Session[]>([
+  const [sessions] = useState<Session[]>([
     { id: '1', title: "What is the meaning of life?", date: "19 Nov", messages: 4 },
     { id: '2', title: "Can you help me with my homework?", date: "18 Nov", messages: 6 },
     { id: '3', title: "Write a poem about spring", date: "17 Nov", messages: 3 }

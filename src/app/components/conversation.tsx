@@ -3,7 +3,6 @@
 import { useConversation } from '@11labs/react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Mic, MicOff, Loader2 } from 'lucide-react';
 import { VoiceWave } from './voice-wave';
 
@@ -11,12 +10,6 @@ interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
-}
-
-// Updated interface to match the expected format
-interface ConversationMessage {
-  message: string;
-  source: 'user' | 'ai';
 }
 
 export function Conversation() {
@@ -65,7 +58,7 @@ export function Conversation() {
     
     try {
       // Request microphone permission
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      await navigator.mediaDevices.getUserMedia({ audio: true });
       console.log('Microphone access granted');
 
       // Get signed URL
