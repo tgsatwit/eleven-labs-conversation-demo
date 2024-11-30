@@ -3,7 +3,7 @@
 import { useConversation } from '@11labs/react';
 import { useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Mic, MicOff, Loader2, Copy, Check, MessageSquare, Volume2 } from 'lucide-react';
+import { Settings, Mic, MicOff, Loader2, Copy, Check, MessageSquare, Volume2 } from 'lucide-react';
 import { VoiceWave } from './voice-wave';
 
 interface ChatMessage {
@@ -126,7 +126,41 @@ export function Conversation() {
   const isConnected = conversation.status === 'connected';
 
   return (
+    <div className="flex-1 flex flex-col p-3 sm:p-4 lg:max-w-[800px]">
+    {/* Header */}
+    <div className="flex items-center justify-between mb-4 sm:mb-6">
+      <div className="flex items-center gap-2">
+        <span className="text-lg sm:text-xl">🎙️</span>
+        <h1 className="text-lg sm:text-xl font-semibold">Voice Assistant</h1>
+      </div>
+      <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+        <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
+      </Button>
+    </div>
+
     <div className="flex-1 flex flex-col gap-4">
+                
+        {/* Try asking suggestions - Updated for Gestalt Language Coach context */}
+        <div className="mb-4 sm:mb-6">
+          <h2 className="text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3">Try asking:</h2>
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            {[
+              "How can I simplify my phrases?",
+              "Tips for following my child's lead",
+              "Ways to encourage echoing",
+              "Strategies for play-based learning",
+              "How to pause effectively"
+            ].map((suggestion) => (
+              <button
+                key={suggestion}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#1A1D1E] hover:bg-[#2A2D2E] text-xs sm:text-sm text-gray-300"
+              >
+                {suggestion}
+              </button>
+            ))}
+          </div>
+        </div>
+
       {/* Controls area */}
       <div className="bg-[#1A1D1E] rounded-lg p-4">
         <div className="flex flex-col items-center gap-3">
@@ -267,6 +301,7 @@ export function Conversation() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
