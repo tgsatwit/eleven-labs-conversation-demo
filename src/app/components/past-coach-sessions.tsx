@@ -23,7 +23,7 @@ export default function PastCoachSessions() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row -screen bg-[#0D0F10] text-white overflow-x-hidden">
+    <div className="flex flex-col lg:flex-row -screen bg-[#0D0F10] text-white overflow-x-hidden mb-4">
           {/* Past Sessions Section */}
           <div className="flex flex-col gap-2 sm:gap-3">
             <div className="flex items-center justify-between">

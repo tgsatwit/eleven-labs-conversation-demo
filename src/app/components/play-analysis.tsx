@@ -12,7 +12,7 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-export function Conversation() {
+export function PlayAnalysis() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [copiedMessageId, setCopiedMessageId] = useState<number | null>(null);
   const [isVoiceMode, setIsVoiceMode] = useState(true);
@@ -174,8 +174,8 @@ export function Conversation() {
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div className="flex items-center gap-2">
-          <span className="text-lg sm:text-xl">🎙️</span>
-          <h1 className="text-lg sm:text-xl font-semibold">Gestalt Language Assistant</h1>
+          
+          <h1 className="text-lg sm:text-xl font-semibold">Play Analzer</h1>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
