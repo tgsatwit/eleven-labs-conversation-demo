@@ -1,5 +1,7 @@
+import { AuthProvider } from '@/context/AuthContext';
+import Navbar from '@/components/Navbar';
+import './globals.css';
 import type { Metadata } from "next";
-import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Gestalts Language Coach",
@@ -9,11 +11,16 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="antialiased bg-custom-dark min-h-screen">{children}</body>
+      <body className="antialiased bg-custom-dark min-h-screen">
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
+      </body>
     </html>
-  )
+  );
 }
