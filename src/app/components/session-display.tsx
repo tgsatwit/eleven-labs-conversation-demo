@@ -1,35 +1,49 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Copy, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ChevronDown, ChevronUp, Copy, Check, MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import { Button } from '../../components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+
+interface Interaction {
+  id: string;
+  analysis: {
+    content: string;
+    timestamp: Date;
+  };
+  transcription: {
+    segments: Array<{
+      text: string;
+      start: number;
+      end: number;
+      speaker?: string;
+    }>;
+  };
+  timestamp: Date;
+  title?: string;
+}
 
 interface SessionDisplayProps {
   title: string;
-  session: {
-    analysis: {
-      content: string;
-      timestamp: Date;
-      isFollowUp?: boolean;
-    };
-    transcription: {
-      segments: Array<{
-        text: string;
-        start: number;
-        end: number;
-        speaker?: string;
-      }>;
-    };
-  };
+  interaction: Interaction;
+  onRename: (newTitle: string) => void;
+  onDelete: () => void;
 }
 
-export function SessionDisplay({ title, session }: SessionDisplayProps) {
+export function SessionDisplay({ title, interaction, onRename, onDelete }: SessionDisplayProps) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isCopied, setIsCopied] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [newTitle, setNewTitle] = useState(title);
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(session.analysis.content);
+      await navigator.clipboard.writeText(interaction.analysis.content);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
@@ -37,19 +51,75 @@ export function SessionDisplay({ title, session }: SessionDisplayProps) {
     }
   };
 
+  const handleRename = () => {
+    if (newTitle.trim()) {
+      onRename(newTitle);
+      setIsRenaming(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleRename();
+    } else if (e.key === 'Escape') {
+      setIsRenaming(false);
+      setNewTitle(title);
+    }
+  };
+
   return (
     <div className="bg-[#1A1D1E] rounded-lg overflow-hidden">
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 flex items-center justify-between text-left hover:bg-[#2A2D2E] transition-colors"
-      >
-        <h2 className="text-sm font-medium text-gray-200">{title}</h2>
-        {isExpanded ? (
-          <ChevronUp className="h-4 w-4 text-gray-400" />
-        ) : (
-          <ChevronDown className="h-4 w-4 text-gray-400" />
-        )}
-      </button>
+      <div className="w-full p-4 flex items-center justify-between text-left hover:bg-[#2A2D2E] transition-colors">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center gap-2 flex-1"
+        >
+          <div className="flex items-center gap-2">
+            {isRenaming ? (
+              <input
+                type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                onBlur={handleRename}
+                onKeyDown={handleKeyDown}
+                className="bg-gray-800 text-white px-2 py-1 rounded text-sm"
+                autoFocus
+              />
+            ) : (
+              <h2 className="text-sm font-medium text-gray-200">{title}</h2>
+            )}
+          </div>
+          {isExpanded ? (
+            <ChevronUp className="h-4 w-4 text-gray-400" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-gray-400" />
+          )}
+        </button>
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-[160px] bg-[#1A1D1E] border border-gray-800">
+            <DropdownMenuItem 
+              onClick={() => setIsRenaming(true)}
+              className="flex items-center gap-2 px-3 py-2 hover:bg-gray-800 focus:bg-gray-800 cursor-pointer"
+            >
+              <Pencil className="h-4 w-4" />
+              <span className="text-sm">Rename</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={onDelete}
+              className="flex items-center gap-2 px-3 py-2 text-red-500 hover:bg-gray-800 focus:bg-gray-800 cursor-pointer"
+            >
+              <Trash2 className="h-4 w-4" />
+              <span className="text-sm">Delete</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
       {isExpanded && (
         <div className="p-4 border-t border-gray-800">
@@ -57,7 +127,7 @@ export function SessionDisplay({ title, session }: SessionDisplayProps) {
           <div className="mb-4">
             <h3 className="text-gray-400 text-sm mb-3">Transcription:</h3>
             <div className="space-y-2 text-sm text-gray-200">
-              {session.transcription.segments.map((segment, index) => (
+              {interaction.transcription.segments.map((segment, index) => (
                 <div key={index} className="flex gap-2">
                   <span className="text-gray-400 min-w-[80px]">
                     {new Date(segment.start * 1000).toISOString().substr(14, 5)}
@@ -89,10 +159,10 @@ export function SessionDisplay({ title, session }: SessionDisplayProps) {
               </Button>
             </div>
             <div className="whitespace-pre-wrap text-sm text-gray-200">
-              {session.analysis.content}
+              {interaction.analysis.content}
             </div>
             <p className="text-[10px] text-gray-400 mt-2">
-              {session.analysis.timestamp.toLocaleString()}
+              {new Date(interaction.timestamp).toLocaleString()}
             </p>
           </div>
         </div>
