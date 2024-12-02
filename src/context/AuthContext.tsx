@@ -10,6 +10,7 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { createUserDocument, updateUserLastLogin } from '@/lib/db';
 
 type AuthContextType = {
   user: User | null;
@@ -31,13 +32,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user);
       setLoading(false);
 
-      // Handle token in cookies
       if (user) {
         const token = await user.getIdToken();
-        // Store token in cookie
         document.cookie = `firebase-token=${token}; path=/`;
+        await updateUserLastLogin(user.uid);
       } else {
-        // Remove token when user is not authenticated
         document.cookie = 'firebase-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       }
     });
@@ -49,6 +48,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     const token = await result.user.getIdToken();
     document.cookie = `firebase-token=${token}; path=/`;
+    
+    await createUserDocument(result.user.uid, {
+      email: result.user.email!,
+      createdAt: new Date(),
+      lastLogin: new Date(),
+    });
   };
 
   const signIn = async (email: string, password: string) => {
