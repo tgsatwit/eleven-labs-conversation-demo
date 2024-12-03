@@ -178,14 +178,14 @@ export function Conversation() {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-[calc(100vh-4rem)] p-3 sm:p-4">
+    <div className="flex-1 flex flex-col h-[calc(100vh-4rem)] p-2 sm:p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <h1 className={`text-lg sm:text-xl font-semibold
             ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
           >
-            Gestalt Language Assistant
+            Language Coach
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -359,12 +359,12 @@ export function Conversation() {
         </div>
 
         {/* Transcript area - takes remaining height */}
-        <div className={`flex-1 rounded-lg transition-colors duration-200 overflow-hidden
+        <div className={`flex-1 min-h-[60vh] rounded-lg transition-colors duration-200 overflow-hidden
           ${theme === 'dark' ? 'bg-gray-800' : 'bg-white shadow-sm'}`}
         >
           <div className="h-full overflow-y-auto custom-scrollbar">
             {messages.length === 0 ? (
-              <div className={`h-full flex flex-col items-center justify-center p-4 text-center
+              <div className={`h-[60vh] sm:h-full flex flex-col items-center justify-center p-4 text-center
                 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
               >
                 <MessageSquare className="h-12 w-12 mb-4 opacity-50" />

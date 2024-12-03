@@ -58,52 +58,54 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Navigation Links */}
-            {user && (
-              <div className="hidden md:ml-6 md:flex md:space-x-4">
-                <Link
-                  href="/overview"
-                  className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
-                    pathname === '/overview'
-                      ? theme === 'dark'
-                        ? 'bg-gray-800 text-white'
-                        : 'bg-gray-100 text-gray-900'
-                      : theme === 'dark'
-                      ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
-                  }`}
-                >
-                  Overview
-                </Link>
-                <Link
-                  href="/coach"
-                  className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
-                    pathname === '/coach'
-                      ? theme === 'dark'
-                        ? 'bg-gray-800 text-white'
-                        : 'bg-gray-100 text-gray-900'
-                      : theme === 'dark'
-                      ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
-                  }`}
-                >
-                  Coach
-                </Link>
-                <Link
-                  href="/analyzer"
-                  className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
-                    pathname === '/analyzer'
-                      ? theme === 'dark'
-                        ? 'bg-gray-800 text-white'
-                        : 'bg-gray-100 text-gray-900'
-                      : theme === 'dark'
-                      ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
-                  }`}
-                >
-                  Analyzer
-                </Link>
-              </div>
-            )}
+            <div className="hidden md:ml-6 md:flex md:space-x-4">
+              <Link
+                href="/overview"
+                className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+                  pathname === '/overview'
+                    ? theme === 'dark'
+                      ? 'bg-gray-800 text-white'
+                      : 'bg-gray-100 text-gray-900'
+                    : theme === 'dark'
+                    ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                }`}
+              >
+                Overview
+              </Link>
+              {user && (
+                <>
+                  <Link
+                    href="/coach"
+                    className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+                      pathname === '/coach'
+                        ? theme === 'dark'
+                          ? 'bg-gray-800 text-white'
+                          : 'bg-gray-100 text-gray-900'
+                        : theme === 'dark'
+                        ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                        : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                    }`}
+                  >
+                    Coach
+                  </Link>
+                  <Link
+                    href="/analyzer"
+                    className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+                      pathname === '/analyzer'
+                        ? theme === 'dark'
+                          ? 'bg-gray-800 text-white'
+                          : 'bg-gray-100 text-gray-900'
+                        : theme === 'dark'
+                        ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                        : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                    }`}
+                  >
+                    Analyzer
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -215,9 +217,9 @@ export default function Navbar() {
                 ? 'bg-gray-800/95 border-gray-700' 
                 : 'bg-gray-50/95 border-gray-200'}`}
             >
+              <MobileNavLink href="/overview">Overview</MobileNavLink>
               {user ? (
                 <>
-                  <MobileNavLink href="/overview">Overview</MobileNavLink>
                   <MobileNavLink href="/coach">Coach</MobileNavLink>
                   <MobileNavLink href="/analyzer">Analyzer</MobileNavLink>
                   <div className={`mt-4 pt-4 border-t ${

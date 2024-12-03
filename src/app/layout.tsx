@@ -5,7 +5,7 @@ import './globals.css';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Gestalts Language Coach",
+  title: "Gestalts - Coaching Feature Demo",
   description: "Gestalts Language Coach",
 };
 
