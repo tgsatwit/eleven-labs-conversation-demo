@@ -22,84 +22,107 @@ export default function Overview() {
         theme === 'dark' ? 'bg-gray-800/50' : 'bg-blue-50'
       }`}>
         <p className="text-sm">
-          This demo showcases only the AI-powered features of the full Gestalts Language Coach platform.
-          Below is an overview of the complete applications capabilities and features.
+          The Gestalt Language Coach is a comprehensive digital platform designed to assist parents, specialists, 
+          and caregivers in supporting and enhancing a child's language development through targeted guidance, 
+          collaborative tools, and advanced AI-driven insights.
         </p>
       </div>
+
+      <Section title="Core Motivation">
+        <div className="space-y-4">
+          <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+            Our platform addresses the critical need for accessible, continuous, and individualized support 
+            in language development for children, especially those with unique learning needs. Parents often 
+            struggle to provide consistent language development activities between specialist sessions, and 
+            traditional resources can be difficult to navigate without expert guidance.
+          </p>
+          <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+            By leveraging AI-driven insights, curated resources, and a robust progress tracking system, 
+            we empower parents and specialists to foster meaningful communication and promote positive 
+            developmental trajectories for children.
+          </p>
+        </div>
+      </Section>
 
       <Section title="Core Features">
         <div className="space-y-4">
           <div>
             <h3 className="font-medium mb-2">AI-Driven Coaching and Analysis</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Personalized AI coaching provides real-time guidance and analysis of play sessions,
-              offering actionable insights for supporting child language development.
+              The AI Coach provides on-demand, personalized recommendations through text, speech-to-text, 
+              or interactive chat. Using context from a child's profile and progress history, it offers 
+              actionable, expert-backed suggestions at your fingertips.
             </p>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Progress Tracking & Development Plans</h3>
+            <h3 className="font-medium mb-2">Comprehensive Progress Tracking</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Comprehensive tracking tools for monitoring milestones, setting goals, and visualizing progress
-              over time with detailed reporting and insights.
+              Create detailed child profiles, set personalized goals, and track progress with visual insights. 
+              Monitor developmental achievements, celebrate milestones, and make informed adjustments to 
+              strategies as your child progresses.
             </p>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Specialist Integration</h3>
+            <h3 className="font-medium mb-2">Interactive Activity Library</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Connect with speech therapists and language specialists, share progress data, and maintain
-              continuity between sessions.
+              Access curated activities aligned with developmental stages and specific language goals. 
+              The Play Analyzer enhances this by recording and analyzing interactions, generating insights 
+              into how activities impact development.
             </p>
           </div>
         </div>
       </Section>
 
-      <Section title="Additional Modules">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Section title="User Journeys">
+        <div className="space-y-6">
           <div>
-            <h3 className="font-medium mb-2">Resource Center</h3>
+            <h3 className="font-medium mb-2">Primary Parent Journey</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Curated library of articles, videos, and training materials for parents and caregivers.
+              Start by creating detailed child profiles and development plans. Engage with the AI Coach 
+              for real-time guidance, manage daily tasks, and track progress through visual reports. 
+              Connect with specialists and other parents through our community features for additional support.
             </p>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Community Forum</h3>
+            <h3 className="font-medium mb-2">Specialist Journey</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Connect with other parents, share experiences, and get support from the community.
+              Access comprehensive client profiles and progress data to inform sessions. Create tailored 
+              tasks, set milestones, and provide expert guidance. Collaborate with parents and other 
+              specialists through integrated communication tools.
             </p>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Task Management</h3>
+            <h3 className="font-medium mb-2">Support Network Journey</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Create and track development activities, set reminders, and manage daily interventions.
-            </p>
-          </div>
-          <div>
-            <h3 className="font-medium mb-2">Specialist Booking</h3>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Find and book sessions with qualified specialists, manage appointments, and track session history.
+              Additional caregivers can participate in task completion, view progress updates, and 
+              contribute to the child's development journey. Stay connected through the messaging 
+              system and community features while maintaining appropriate access levels.
             </p>
           </div>
         </div>
       </Section>
 
-      <Section title="Target Users">
+      <Section title="Value Proposition">
         <div className="space-y-4">
           <div>
-            <h3 className="font-medium mb-2">Parents & Caregivers</h3>
+            <h3 className="font-medium mb-2">Personalized Support</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Primary users who manage child profiles, track progress, and implement daily language support strategies.
+              Receive tailored guidance and support between specialist sessions, with tools to actively 
+              participate in and influence your child's progress in meaningful ways.
             </p>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Specialists</h3>
+            <h3 className="font-medium mb-2">Collaborative Environment</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Speech therapists and language specialists who provide professional guidance and monitor progress.
+              Connect with qualified specialists, share experiences with other parents, and maintain 
+              a coordinated approach to supporting your child's language development.
             </p>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Support Network</h3>
+            <h3 className="font-medium mb-2">Data-Driven Progress</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Additional caregivers and family members who contribute to the childs development journey.
+              Track development through comprehensive analytics and visual reports, helping you make 
+              informed decisions and celebrate progress along your child's unique journey.
             </p>
           </div>
         </div>
