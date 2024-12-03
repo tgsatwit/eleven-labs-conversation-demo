@@ -5,6 +5,7 @@ import { Settings, Copy, Check, ArrowRight, Save, Share2, Users, MoreVertical, T
 import { Button } from '../../components/ui/button';
 import { SessionInput } from './session-input';
 import { SessionDisplay } from './session-display';
+import { useTheme } from '@/context/ThemeContext';
 import {
   Dialog,
   DialogContent,
@@ -106,6 +107,7 @@ interface SessionToSave {
 }
 
 export function PlayAnalysis() {
+  const { theme } = useTheme();
   const [currentInteractions, setCurrentInteractions] = useState<Interaction[]>([]);
   const [savedSessions, setSavedSessions] = useState<SavedSession[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -354,15 +356,19 @@ export function PlayAnalysis() {
         <div className="flex items-center gap-2">
           {currentInteractions.length > 0 && (
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={startNewSession}
-              className="text-gray-400 hover:text-white"
+              className={theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-400' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}
             >
               New Session
             </Button>
           )}
-          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-400' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}
+          >
             <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </div>
@@ -370,7 +376,9 @@ export function PlayAnalysis() {
 
       <div className="flex-1 flex flex-col gap-4">
         {currentInteractions.length === 0 && (
-          <div className="bg-[#1A1D1E] rounded-lg p-4">
+          <div className={`rounded-lg p-4 transition-colors duration-200
+            ${theme === 'dark' ? 'bg-gray-800' : 'bg-white shadow-sm'}`}
+          >
             <SessionInput 
               onSessionReady={handleSessionReady}
               onTranscriptUpdate={handleTranscriptUpdate}
@@ -379,8 +387,10 @@ export function PlayAnalysis() {
             />
             {isRecording && liveTranscript && (
               <div className="mt-4">
-                <h2 className="text-gray-400 text-sm mb-3">Live Transcription:</h2>
-                <div className="text-sm text-gray-200">
+                <h2 className={`text-sm mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Live Transcription:
+                </h2>
+                <div className={`text-sm ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
                   {liveTranscript}
                 </div>
               </div>
@@ -389,23 +399,25 @@ export function PlayAnalysis() {
         )}
 
         {currentInteractions.length > 0 && (
-          <div className="bg-[#1A1D1E] rounded-lg p-4">
+          <div className={`rounded-lg p-4 transition-colors duration-200
+            ${theme === 'dark' ? 'bg-gray-800' : 'bg-white shadow-sm'}`}
+          >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Current Session</h2>
               <div className="flex items-center gap-2">
                 <Button
                   onClick={() => setShowSaveDialog(true)}
-                  variant="outline"
+                  variant="ghost"
                   size="icon"
-                  className="text-gray-400 hover:text-white"
+                  className={theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-400' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}
                 >
                   <Save className="h-4 w-4" />
                 </Button>
                 <Button
                   onClick={() => setShowDeleteCurrentDialog(true)}
-                  variant="outline"
+                  variant="ghost"
                   size="icon"
-                  className="text-red-500 hover:text-red-600"
+                  className={theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-400' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -420,9 +432,10 @@ export function PlayAnalysis() {
                     onRename={(newTitle) => handleRenameInteraction(interaction.id, newTitle)}
                     onDelete={() => handleDeleteInteraction(interaction.id)}
                   />
-                  {/* Place recording interface after the last interaction when recording follow-up */}
                   {isRecordingFollowUp && index === currentInteractions.length - 1 && (
-                    <div className="border-l-2 border-blue-500 pl-4 ml-4">
+                    <div className={`border-l-2 border-blue-500 pl-4 ml-4 transition-colors duration-200
+                      ${theme === 'dark' ? 'bg-gray-800/50' : 'bg-blue-50'}`}
+                    >
                       <div className="text-sm text-blue-400 mb-2">Recording Follow-up Interaction</div>
                       <SessionInput 
                         onSessionReady={handleSessionReady}
@@ -432,8 +445,10 @@ export function PlayAnalysis() {
                       />
                       {isRecording && liveTranscript && (
                         <div className="mt-4">
-                          <h2 className="text-gray-400 text-sm mb-3">Live Transcription:</h2>
-                          <div className="text-sm text-gray-200">
+                          <h2 className={`text-sm mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                            Live Transcription:
+                          </h2>
+                          <div className={`text-sm ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
                             {liveTranscript}
                           </div>
                         </div>
@@ -448,12 +463,16 @@ export function PlayAnalysis() {
 
         {/* Save Dialog */}
         {showSaveDialog && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-            <div className="bg-[#1A1D1E] rounded-lg p-6 max-w-md w-full">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+            <div className={`rounded-lg p-6 max-w-md w-full transition-colors duration-200
+              ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
+            >
               <h2 className="text-lg font-semibold mb-4">Save Session</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">
+                  <label className={`block text-sm font-medium mb-1
+                    ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
+                  >
                     Session Name
                   </label>
                   <input
@@ -461,7 +480,10 @@ export function PlayAnalysis() {
                     placeholder={generateDefaultSessionName()}
                     value={sessionName}
                     onChange={(e) => setSessionName(e.target.value)}
-                    className="w-full px-3 py-2 bg-gray-800 rounded-md text-white text-sm"
+                    className={`w-full px-3 py-2 rounded-md text-sm border transition-colors duration-200
+                      ${theme === 'dark' 
+                        ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
+                        : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-blue-400'}`}
                   />
                 </div>
                 <div className="flex items-center">
@@ -472,7 +494,9 @@ export function PlayAnalysis() {
                     onChange={(e) => setIsPublic(e.target.checked)}
                     className="mr-2"
                   />
-                  <label htmlFor="isPublic" className="text-sm text-gray-400">
+                  <label htmlFor="isPublic" className={`text-sm
+                    ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
+                  >
                     Make this session visible to others
                   </label>
                 </div>
@@ -485,7 +509,7 @@ export function PlayAnalysis() {
                   </Button>
                   <Button
                     onClick={handleSaveSession}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
                   >
                     Save
                   </Button>
@@ -497,7 +521,9 @@ export function PlayAnalysis() {
 
         {/* Saved Sessions */}
         {savedSessions.map((session, sessionIndex) => (
-          <div key={sessionIndex} className="bg-[#1A1D1E] rounded-lg p-4">
+          <div key={sessionIndex} className={`rounded-lg p-4 transition-colors duration-200
+            ${theme === 'dark' ? 'bg-gray-800' : 'bg-white shadow-sm'}`}
+          >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">{session.metadata.name}</h2>
               <div className="flex items-center gap-2">
@@ -508,7 +534,7 @@ export function PlayAnalysis() {
                   variant="outline"
                   size="sm"
                   onClick={() => continueSession(sessionIndex)}
-                  className="text-gray-400 hover:text-white"
+                  className={theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}
                   disabled={activeSessionIndex === sessionIndex}
                 >
                   {activeSessionIndex === sessionIndex ? 'Current Session' : 'Continue Session'}
@@ -629,7 +655,9 @@ export function PlayAnalysis() {
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-200">
+                <label className={`text-sm font-medium
+                  ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}
+                >
                   Session Name
                 </label>
                 <input
@@ -637,11 +665,16 @@ export function PlayAnalysis() {
                   placeholder={generateDefaultSessionName()}
                   value={sessionToSave.name}
                   onChange={(e) => setSessionToSave(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-3 py-2 bg-gray-800 rounded-md text-white text-sm border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                  className={`w-full px-3 py-2 rounded-md text-sm border transition-colors duration-200
+                    ${theme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                      : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-blue-400'}`}
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-200">
+                <label className={`text-sm font-medium
+                  ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}
+                >
                   Share With
                 </label>
                 <Select
@@ -660,7 +693,9 @@ export function PlayAnalysis() {
                           {option.id === 'public' && <Share2 className="h-4 w-4" />}
                           <div>
                             <div className="font-medium">{option.label}</div>
-                            <div className="text-xs text-gray-400">{option.description}</div>
+                            <div className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {option.description}
+                            </div>
                           </div>
                         </div>
                       </SelectItem>
@@ -668,7 +703,7 @@ export function PlayAnalysis() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="mt-2 text-sm text-gray-400">
+              <div className={`mt-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                 By saving this session, you consent to this information being stored on your profile.
                 This data will be used in accordance with our privacy policy.
               </div>
@@ -681,7 +716,7 @@ export function PlayAnalysis() {
                 </Button>
                 <Button
                   onClick={handleSaveEntireSession}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   Save Session
                 </Button>

@@ -176,7 +176,6 @@ export function Conversation() {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-lg sm:text-xl">🎙️</span>
           <h1 className={`text-lg sm:text-xl font-semibold
             ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
           >
@@ -216,13 +215,6 @@ export function Conversation() {
               Text
             </button>
           </div>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className={theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}
-          >
-            <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Button>
         </div>
       </div>
 

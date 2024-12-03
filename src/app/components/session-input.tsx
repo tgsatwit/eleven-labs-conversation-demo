@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Mic, Upload, Loader2, StopCircle, Circle } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
 
 interface SessionInputProps {
   onSessionReady: (file: File) => void;
@@ -17,6 +18,7 @@ export function SessionInput({
   onRecordingStateChange, 
   isLoading 
 }: SessionInputProps) {
+  const { theme } = useTheme();
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -153,9 +155,9 @@ export function SessionInput({
         />
         <label htmlFor="file-upload">
           <Button
-            variant="outline"
+            variant={theme === 'dark' ? 'outline' : 'secondary'}
             className={`cursor-pointer transition-all duration-200 ${
-              isRecording ? 'opacity-50' : 'hover:bg-[#2A2D2E]'
+              isRecording ? 'opacity-50' : ''
             }`}
             disabled={isLoading || isRecording}
           >
@@ -164,15 +166,13 @@ export function SessionInput({
           </Button>
         </label>
         
-        <span className="text-gray-400">or</span>
+        <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>or</span>
 
         <Button
           onClick={isRecording ? stopRecording : startRecording}
-          variant={isRecording ? "destructive" : "outline"}
+          variant={isRecording ? "destructive" : theme === 'dark' ? 'outline' : 'secondary'}
           disabled={isLoading}
-          className={`transition-all duration-200 ${
-            isRecording ? '' : 'hover:bg-[#2A2D2E]'
-          }`}
+          className="transition-all duration-200"
         >
           {isRecording ? (
             <>
