@@ -62,9 +62,14 @@ module.exports = {
           '0%, 100%': { height: '0.25rem' },
           '50%': { height: '2rem' },
         },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        }
       },
       animation: {
         'voice-wave': 'voice-wave 1s ease-in-out infinite',
+        'fade-in': 'fade-in 0.3s ease-in-out',
       },
     },
   },

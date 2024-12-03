@@ -247,11 +247,11 @@ export function Conversation() {
             >
               <div className="grid grid-cols-1 gap-2">
                 {[
-                  "How can I simplify my phrases?",
-                  "Tips for following my child's lead",
-                  "Ways to encourage echoing",
-                  "Strategies for play-based learning",
-                  "How to pause effectively"
+                  "I just learned my child is a gestalt language processor. What does this mean?",
+                  "My child repeats movie phrases instead of saying what they want. How can I help them?",
+                  "What's a simple way to explain gestalt processing to family members?",
+                  "What activities can I do at home between speech therapy sessions?",
+                  "How do I know if my child is making progress?"
                 ].map((suggestion) => (
                   <button
                     key={suggestion}
