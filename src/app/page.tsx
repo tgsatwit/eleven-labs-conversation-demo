@@ -40,7 +40,7 @@ export default function Home() {
                 Get instant feedback and suggestions for supporting your childs language development.
               </p>
               <p className="mt-auto text-xs text-gray-400 mb-2">
-                NB: Users are required to login to manage taken usage.
+                NB: Users are required to login to manage token usage.
               </p>
             </div>
           </Link>
@@ -57,7 +57,7 @@ export default function Home() {
                 Receive structured feedback on interaction patterns and language development opportunities.
               </p>
               <p className="mt-auto text-xs text-gray-400 mb-2">
-                NB: Users are required to login to manage taken usage.
+                NB: Users are required to login to manage token usage.
               </p>
             </div>
           </Link>

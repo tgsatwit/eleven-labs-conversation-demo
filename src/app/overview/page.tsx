@@ -23,7 +23,7 @@ export default function Overview() {
       }`}>
         <p className="text-sm">
           The Gestalt Language Coach is a comprehensive digital platform designed to assist parents, specialists, 
-          and caregivers in supporting and enhancing a child's language development through targeted guidance, 
+          and caregivers in supporting and enhancing a childs language development through targeted guidance, 
           collaborative tools, and advanced AI-driven insights.
         </p>
       </div>
@@ -50,7 +50,7 @@ export default function Overview() {
             <h3 className="font-medium mb-2">AI-Driven Coaching and Analysis</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
               The AI Coach provides on-demand, personalized recommendations through text, speech-to-text, 
-              or interactive chat. Using context from a child's profile and progress history, it offers 
+              or interactive chat. Using context from a childs profile and progress history, it offers 
               actionable, expert-backed suggestions at your fingertips.
             </p>
           </div>
@@ -95,7 +95,7 @@ export default function Overview() {
             <h3 className="font-medium mb-2">Support Network Journey</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
               Additional caregivers can participate in task completion, view progress updates, and 
-              contribute to the child's development journey. Stay connected through the messaging 
+              contribute to the childs development journey. Stay connected through the messaging 
               system and community features while maintaining appropriate access levels.
             </p>
           </div>
@@ -108,21 +108,21 @@ export default function Overview() {
             <h3 className="font-medium mb-2">Personalized Support</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
               Receive tailored guidance and support between specialist sessions, with tools to actively 
-              participate in and influence your child's progress in meaningful ways.
+              participate in and influence your childs progress in meaningful ways.
             </p>
           </div>
           <div>
             <h3 className="font-medium mb-2">Collaborative Environment</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
               Connect with qualified specialists, share experiences with other parents, and maintain 
-              a coordinated approach to supporting your child's language development.
+              a coordinated approach to supporting your childs language development.
             </p>
           </div>
           <div>
             <h3 className="font-medium mb-2">Data-Driven Progress</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
               Track development through comprehensive analytics and visual reports, helping you make 
-              informed decisions and celebrate progress along your child's unique journey.
+              informed decisions and celebrate progress along your childs unique journey.
             </p>
           </div>
         </div>
