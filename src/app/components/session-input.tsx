@@ -46,8 +46,16 @@ export function SessionInput({
     try {
       setRecordingTime(0); // Reset timer
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      // Check supported MIME types
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm')
+        ? 'audio/webm'
+        : MediaRecorder.isTypeSupported('audio/mp4')
+        ? 'audio/mp4'
+        : 'audio/aac';
+
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm',
+        mimeType: mimeType,
       });
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
@@ -58,8 +66,8 @@ export function SessionInput({
           chunksRef.current.push(e.data);
           
           // Create a blob from the latest chunk
-          const audioBlob = new Blob([e.data], { type: 'audio/webm' });
-          const file = new File([audioBlob], 'chunk.webm', { type: 'audio/webm' });
+          const audioBlob = new Blob([e.data], { type: mimeType });
+          const file = new File([audioBlob], `chunk.${mimeType.split('/')[1]}`, { type: mimeType });
 
           // Send for transcription
           try {
@@ -82,8 +90,8 @@ export function SessionInput({
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        const audioFile = new File([audioBlob], 'recording.webm', { type: 'audio/webm' });
+        const audioBlob = new Blob(chunksRef.current, { type: mimeType });
+        const audioFile = new File([audioBlob], `recording.${mimeType.split('/')[1]}`, { type: mimeType });
         onSessionReady(audioFile);
         stream.getTracks().forEach(track => track.stop());
       };
@@ -147,7 +155,7 @@ export function SessionInput({
       <div className="flex flex-col sm:flex-row items-center gap-4">
         <input
           type="file"
-          accept="audio/*,video/*"
+          accept="audio/*,.m4a,.mp4,.aac,.wav,.mp3"
           onChange={handleFileUpload}
           className="hidden"
           id="file-upload"
