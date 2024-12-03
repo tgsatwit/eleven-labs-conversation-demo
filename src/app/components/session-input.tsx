@@ -134,17 +134,17 @@ export function SessionInput({
   }, [isRecording]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       {/* Recording status indicator */}
       {isRecording && (
         <div className="flex items-center justify-center gap-2 p-2 bg-red-500/10 rounded-lg">
           <Circle className="h-3 w-3 fill-red-500 animate-pulse" />
-          <span className="text-red-500 font-medium">Recording in progress</span>
-          <span className="text-red-400">({formatTime(recordingTime)})</span>
+          <span className="text-red-500 font-medium text-sm sm:text-base">Recording in progress</span>
+          <span className="text-red-400 text-sm sm:text-base">({formatTime(recordingTime)})</span>
         </div>
       )}
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
         <input
           type="file"
           accept="audio/*,video/*"
@@ -153,10 +153,10 @@ export function SessionInput({
           id="file-upload"
           disabled={isLoading || isRecording}
         />
-        <label htmlFor="file-upload">
+        <label htmlFor="file-upload" className="w-full sm:w-auto">
           <Button
             variant={theme === 'dark' ? 'outline' : 'secondary'}
-            className={`cursor-pointer transition-all duration-200 ${
+            className={`w-full sm:w-auto cursor-pointer transition-all duration-200 ${
               isRecording ? 'opacity-50' : ''
             }`}
             disabled={isLoading || isRecording}
@@ -166,13 +166,13 @@ export function SessionInput({
           </Button>
         </label>
         
-        <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>or</span>
+        <span className={`hidden sm:block ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>or</span>
 
         <Button
           onClick={isRecording ? stopRecording : startRecording}
           variant={isRecording ? "destructive" : theme === 'dark' ? 'outline' : 'secondary'}
           disabled={isLoading}
-          className="transition-all duration-200"
+          className="w-full sm:w-auto transition-all duration-200"
         >
           {isRecording ? (
             <>
@@ -191,7 +191,7 @@ export function SessionInput({
       {isLoading && (
         <div className="flex items-center justify-center gap-2 p-3 bg-blue-500/10 rounded-lg">
           <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
-          <span className="text-blue-500 font-medium">Processing recording...</span>
+          <span className="text-blue-500 font-medium text-sm sm:text-base">Processing recording...</span>
         </div>
       )}
     </div>
