@@ -19,7 +19,7 @@ export default function Login() {
     try {
       await signIn(email, password);
       router.push('/');
-    } catch (err) {
+    } catch {
       setError('Failed to sign in');
     }
   };
@@ -97,7 +97,7 @@ export default function Login() {
                     : 'text-indigo-600 hover:text-indigo-500'
                   }`}
               >
-                Don't have an account? Sign up
+                No account? Sign up
               </Link>
             </div>
           </div>

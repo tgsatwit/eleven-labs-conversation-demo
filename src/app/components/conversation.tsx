@@ -3,7 +3,7 @@
 import { useConversation } from '@11labs/react';
 import { useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Settings, Mic, MicOff, Loader2, Copy, Check, MessageSquare, Volume2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Mic, MicOff, Loader2, Copy, Check, MessageSquare, Volume2, ChevronDown, ChevronUp } from 'lucide-react';
 import { VoiceWave } from './voice-wave';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -11,6 +11,12 @@ interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+}
+
+interface ConversationMessage {
+  message?: string;
+  text?: string;
+  source?: string;
 }
 
 export function Conversation() {
@@ -35,7 +41,7 @@ export function Conversation() {
   const conversation = useConversation({
     onConnect: () => console.log('Connected'),
     onDisconnect: () => console.log('Disconnected'),
-    onMessage: (message: any) => {
+    onMessage: (message: ConversationMessage) => {
       console.log('Received message:', message);
       const messageText = message.message || message.text || '';
       const source = message.source || 'ai';

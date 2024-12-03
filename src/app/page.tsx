@@ -25,7 +25,7 @@ export default function Home() {
         }`}>
           This demo showcases the AI-powered features of our platform. Try out the Language Coach for
           real-time guidance or the Play Analyzer for session feedback. For a full overview of the
-          complete application's capabilities, visit our overview page.
+          complete applications capabilities, visit our overview page.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
@@ -38,7 +38,7 @@ export default function Home() {
               <h2 className="text-xl font-semibold mb-4">Language Coach</h2>
               <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                 Have a real-time conversation with an AI assistant trained in Gestalt Language Processing.
-                Get instant feedback and suggestions for supporting your child's language development.
+                Get instant feedback and suggestions for supporting your childs language development.
               </p>
             </div>
           </Link>

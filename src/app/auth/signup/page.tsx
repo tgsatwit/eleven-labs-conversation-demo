@@ -19,7 +19,7 @@ export default function SignUp() {
     try {
       await signUp(email, password);
       router.push('/');
-    } catch (err) {
+    } catch {
       setError('Failed to create an account');
     }
   };

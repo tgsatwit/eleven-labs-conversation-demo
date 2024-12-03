@@ -23,7 +23,7 @@ export default function Overview() {
       }`}>
         <p className="text-sm">
           This demo showcases only the AI-powered features of the full Gestalts Language Coach platform.
-          Below is an overview of the complete application&apos;s capabilities and features.
+          Below is an overview of the complete applications capabilities and features.
         </p>
       </div>
 
@@ -99,7 +99,7 @@ export default function Overview() {
           <div>
             <h3 className="font-medium mb-2">Support Network</h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Additional caregivers and family members who contribute to the child's development journey.
+              Additional caregivers and family members who contribute to the childs development journey.
             </p>
           </div>
         </div>

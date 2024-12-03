@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Settings, Copy, Check, ArrowRight, Save, Share2, Users, MoreVertical, Trash2 } from 'lucide-react';
+import { Settings, Save, Share2, Users, MoreVertical, Trash2 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { SessionInput } from './session-input';
 import { SessionDisplay } from './session-display';
@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../../components/ui/dialog";
 import {
   Select,
@@ -163,7 +162,7 @@ export function PlayAnalysis() {
         .join('\n');
 
       // Prepare analysis message based on whether this is a follow-up
-      let analysisMessage = isRecordingFollowUp && currentInteractions.length > 0
+      const analysisMessage = isRecordingFollowUp && currentInteractions.length > 0
         ? `This is a follow-up session to implement previous feedback. 
            
            Previous session transcript:
