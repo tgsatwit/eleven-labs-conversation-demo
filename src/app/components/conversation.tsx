@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Settings, Mic, MicOff, Loader2, Copy, Check, MessageSquare, Volume2, ChevronDown, ChevronUp } from 'lucide-react';
 import { VoiceWave } from './voice-wave';
+import { useTheme } from '@/context/ThemeContext';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -13,6 +14,7 @@ interface ChatMessage {
 }
 
 export function Conversation() {
+  const { theme } = useTheme();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [copiedMessageId, setCopiedMessageId] = useState<number | null>(null);
   const [isVoiceMode, setIsVoiceMode] = useState(true);
@@ -170,19 +172,29 @@ export function Conversation() {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-3 sm:p-4 lg:max-w-[800px]">
+    <div className="flex-1 flex flex-col h-[calc(100vh-4rem)] p-3 sm:p-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 sm:mb-6">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-lg sm:text-xl">🎙️</span>
-          <h1 className="text-lg sm:text-xl font-semibold">Gestalt Language Assistant</h1>
+          <h1 className={`text-lg sm:text-xl font-semibold
+            ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
+          >
+            Gestalt Language Assistant
+          </h1>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <button
               onClick={() => setIsVoiceMode(true)}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm ${
-                isVoiceMode ? 'bg-[#2A2D2E] text-white' : 'text-gray-400'
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm transition-colors duration-200 ${
+                isVoiceMode 
+                  ? theme === 'dark'
+                    ? 'bg-gray-800 text-white'
+                    : 'bg-gray-200 text-gray-900'
+                  : theme === 'dark'
+                    ? 'text-gray-400'
+                    : 'text-gray-500'
               }`}
             >
               <Volume2 className="h-4 w-4" />
@@ -190,26 +202,41 @@ export function Conversation() {
             </button>
             <button
               onClick={() => setIsVoiceMode(false)}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm ${
-                !isVoiceMode ? 'bg-[#2A2D2E] text-white' : 'text-gray-400'
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm transition-colors duration-200 ${
+                !isVoiceMode 
+                  ? theme === 'dark'
+                    ? 'bg-gray-800 text-white'
+                    : 'bg-gray-200 text-gray-900'
+                  : theme === 'dark'
+                    ? 'text-gray-400'
+                    : 'text-gray-500'
               }`}
             >
               <MessageSquare className="h-4 w-4" />
               Text
             </button>
           </div>
-          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}
+          >
             <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col gap-4">
-        {/* Suggested prompts */}
-        <div className="relative">
+      {/* Main content area with flex-1 to take remaining space */}
+      <div className="flex-1 flex flex-col min-h-0">
+
+        {/* Suggestions */}
+        <div className="relative mb-4">
           <button
             onClick={() => setIsSuggestionsOpen(!isSuggestionsOpen)}
-            className="flex items-center gap-2 text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors"
+            className={`flex items-center gap-2 text-xs sm:text-sm transition-colors duration-200
+              ${theme === 'dark'
+                ? 'text-gray-400 hover:text-gray-300'
+                : 'text-gray-500 hover:text-gray-700'}`}
           >
             <span>Need suggestions?</span>
             {isSuggestionsOpen ? (
@@ -220,7 +247,12 @@ export function Conversation() {
           </button>
           
           {isSuggestionsOpen && (
-            <div className="absolute top-full left-0 right-0 mt-2 p-3 bg-[#1A1D1E] rounded-lg shadow-lg border border-gray-800 z-10">
+            <div className={`absolute top-full left-0 right-0 mt-2 p-3 rounded-lg shadow-lg border z-10
+              transition-colors duration-200
+              ${theme === 'dark'
+                ? 'bg-gray-800 border-gray-700'
+                : 'bg-white border-gray-200'}`}
+            >
               <div className="grid grid-cols-1 gap-2">
                 {[
                   "How can I simplify my phrases?",
@@ -233,9 +265,12 @@ export function Conversation() {
                     key={suggestion}
                     onClick={() => {
                       handleSuggestionClick(suggestion);
-                      setIsSuggestionsOpen(false); // Close dropdown after selection
+                      setIsSuggestionsOpen(false);
                     }}
-                    className="text-left px-3 py-2 rounded-lg hover:bg-[#2A2D2E] text-sm text-gray-300 transition-colors"
+                    className={`text-left px-3 py-2 rounded-lg text-sm transition-colors duration-200
+                      ${theme === 'dark'
+                        ? 'text-gray-300 hover:bg-gray-700'
+                        : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     {suggestion}
                   </button>
@@ -246,7 +281,9 @@ export function Conversation() {
         </div>
 
         {/* Controls area */}
-        <div className="bg-[#1A1D1E] rounded-lg p-3">
+        <div className={`mb-4 rounded-lg p-3 transition-colors duration-200
+          ${theme === 'dark' ? 'bg-gray-800' : 'bg-white shadow-sm'}`}
+        >
           <div className="flex items-center justify-center gap-3">
             {isVoiceMode ? (
               // Voice controls - horizontal layout with reversed order
@@ -289,86 +326,116 @@ export function Conversation() {
               </div>
             ) : (
               // Text input controls - more compact
-              <form onSubmit={handleTextSubmit} className="w-full max-w-2xl">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                    placeholder="Type your message..."
-                    className="flex-1 px-4 py-2 rounded-lg bg-[#2A2D2E] text-white border border-gray-700 focus:outline-none focus:border-gray-500 text-left"
-                    disabled={isLoading}
-                  />
-                  <Button 
-                    type="submit" 
-                    disabled={isLoading || !inputText.trim()}
-                    className="px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium min-w-[100px]"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      'Send'
-                    )}
-                  </Button>
-                </div>
-              </form>
+
+            <form onSubmit={handleTextSubmit} className="w-full">
+              <div className={`flex items-stretch gap-2 p-2 rounded-lg transition-colors duration-200 w-full
+                ${theme === 'dark' ? 'bg-gray-800' : 'bg-white shadow-sm'}`}
+              >
+                <input
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  placeholder="Type your message..."
+                  className={`flex-1 min-w-0 bg-transparent border-0 focus:ring-0 text-sm px-3
+                    ${theme === 'dark' ? 'text-white placeholder:text-gray-400' : 'text-gray-900 placeholder:text-gray-500'}`}
+                />
+                <Button 
+                  type="submit" 
+                  disabled={!inputText.trim() || isLoading}
+                  className={`h-10 w-10 flex items-center justify-center rounded-md
+                    ${theme === 'dark' 
+                      ? 'bg-white hover:bg-gray-100 text-gray-900' 
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-900'}`}
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <MessageSquare className="h-5 w-5" />
+                  )}
+                </Button>
+              </div>
+            </form>
+    
             )}
           </div>
         </div>
 
-        {/* Transcript area */}
-        <div className="flex-1 min-h-[200px] bg-[#1A1D1E] rounded-lg p-3">
-          <h2 className="text-gray-400 mb-3 text-sm">Transcript:</h2>
-          <div className="h-[calc(100%-2rem)] overflow-y-auto space-y-3">
+        {/* Transcript area - takes remaining height */}
+        <div className={`flex-1 rounded-lg transition-colors duration-200 overflow-hidden
+          ${theme === 'dark' ? 'bg-gray-800' : 'bg-white shadow-sm'}`}
+        >
+          <div className="h-full overflow-y-auto custom-scrollbar">
             {messages.length === 0 ? (
-              <p className="text-gray-500">
-                Start a conversation to see messages here
-              </p>
+              <div className={`h-full flex flex-col items-center justify-center p-4 text-center
+                ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
+              >
+                <MessageSquare className="h-12 w-12 mb-4 opacity-50" />
+                <p className="text-sm">Start a conversation by speaking or typing your message.</p>
+              </div>
             ) : (
-              messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`flex ${
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
-                  }`}
-                >
+              <div className="p-4 space-y-4">
+                {messages.map((message, index) => (
                   <div
-                    className={`
-                      max-w-[85%] sm:max-w-[80%] 
-                      px-4 py-2 
-                      rounded-lg
-                      text-sm
-                      group
-                      relative
-                      ${
-                        message.role === 'user'
-                          ? 'bg-[#2A2D2E] text-white'
-                          : 'bg-[#1E2122] text-gray-200'
-                      }
-                    `}
+                    key={index}
+                    className={`flex gap-3 ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}
                   >
-                    <p className="text-sm break-words pr-6">{message.content}</p>
-                    <div className="flex items-center justify-between mt-1">
-                      <p className="text-[10px] text-gray-400">
-                        {message.timestamp.toLocaleTimeString()}
-                      </p>
-                      {message.role === 'assistant' && (
+                    <div className={`group max-w-[80%] text-sm
+                      ${message.role === 'assistant'
+                        ? theme === 'dark'
+                          ? 'bg-gray-700'
+                          : 'bg-gray-100'
+                        : theme === 'dark'
+                          ? 'bg-indigo-600'
+                          : 'bg-indigo-500'
+                      } rounded-lg p-3`}
+                    >
+                      <div className={`mb-1 flex items-center gap-2
+                        ${message.role === 'assistant'
+                          ? theme === 'dark'
+                            ? 'text-gray-300'
+                            : 'text-gray-700'
+                          : 'text-white'}`}
+                      >
+                        <span className="font-medium">
+                          {message.role === 'assistant' ? 'AI Assistant' : 'You'}
+                        </span>
+                        <span className={`text-xs
+                          ${message.role === 'assistant'
+                            ? theme === 'dark'
+                              ? 'text-gray-400'
+                              : 'text-gray-500'
+                            : 'text-indigo-100'}`}
+                        >
+                          {message.timestamp.toLocaleTimeString()}
+                        </span>
                         <button
                           onClick={() => copyToClipboard(message.content, index)}
-                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                          title="Copy response"
+                          className={`opacity-0 group-hover:opacity-100 transition-opacity ml-auto
+                            ${message.role === 'assistant'
+                              ? theme === 'dark'
+                                ? 'text-gray-400 hover:text-gray-300'
+                                : 'text-gray-500 hover:text-gray-700'
+                              : 'text-indigo-100 hover:text-white'}`}
                         >
                           {copiedMessageId === index ? (
-                            <Check className="h-4 w-4 text-green-500" />
+                            <Check className="h-4 w-4" />
                           ) : (
-                            <Copy className="h-4 w-4 text-gray-400 hover:text-white" />
+                            <Copy className="h-4 w-4" />
                           )}
                         </button>
-                      )}
+                      </div>
+                      <p className={message.role === 'assistant'
+                        ? theme === 'dark'
+                          ? 'text-gray-100'
+                          : 'text-gray-800'
+                        : 'text-white'}
+                      >
+                        {message.content}
+                      </p>
                     </div>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             )}
           </div>
         </div>

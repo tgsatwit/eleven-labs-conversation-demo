@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -11,22 +12,27 @@ export default function SignUp() {
   const [error, setError] = useState('');
   const router = useRouter();
   const { signUp } = useAuth();
+  const { theme } = useTheme();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await signUp(email, password);
-      router.push('/'); // Redirect to home page after successful signup
+      router.push('/');
     } catch (err) {
       setError('Failed to create an account');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
+    <div className="min-h-screen flex items-center justify-center">
+      <div className={`max-w-md w-full space-y-8 p-8 rounded-lg shadow-lg transition-colors duration-200
+        ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
+      >
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className={`mt-6 text-center text-3xl font-extrabold
+            ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
+          >
             Create your account
           </h2>
         </div>
@@ -39,7 +45,13 @@ export default function SignUp() {
               <input
                 type="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 border
+                  border-gray-300 placeholder-gray-500 rounded-t-md focus:outline-none
+                  focus:ring-2 focus:ring-offset-2 focus:z-10 sm:text-sm transition-colors duration-200
+                  ${theme === 'dark'
+                    ? 'bg-gray-700 text-white focus:ring-gray-500 focus:border-gray-500'
+                    : 'bg-white text-gray-900 focus:ring-indigo-500 focus:border-indigo-500'
+                  }`}
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -49,7 +61,13 @@ export default function SignUp() {
               <input
                 type="password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 border
+                  border-gray-300 placeholder-gray-500 rounded-b-md focus:outline-none
+                  focus:ring-2 focus:ring-offset-2 focus:z-10 sm:text-sm transition-colors duration-200
+                  ${theme === 'dark'
+                    ? 'bg-gray-700 text-white focus:ring-gray-500 focus:border-gray-500'
+                    : 'bg-white text-gray-900 focus:ring-indigo-500 focus:border-indigo-500'
+                  }`}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -58,7 +76,14 @@ export default function SignUp() {
           </div>
 
           <div className="text-sm text-center">
-            <Link href="/auth/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <Link
+              href="/auth/login"
+              className={`font-medium transition-colors duration-200
+                ${theme === 'dark'
+                  ? 'text-gray-300 hover:text-white'
+                  : 'text-indigo-600 hover:text-indigo-500'
+                }`}
+            >
               Already have an account? Sign in
             </Link>
           </div>
@@ -66,7 +91,13 @@ export default function SignUp() {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent
+                text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2
+                focus:ring-offset-2 transition-colors duration-200
+                ${theme === 'dark'
+                  ? 'bg-gray-700 hover:bg-gray-600 focus:ring-gray-500'
+                  : 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500'
+                }`}
             >
               Sign up
             </button>
