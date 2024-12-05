@@ -54,6 +54,7 @@ export default function Navbar() {
               <Logo />
               <span className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 Gestalts
+                <sup className="ml-1 text-xs bg-blue-500 text-white rounded-full px-2 py-0.5">beta</sup>
               </span>
             </Link>
 
