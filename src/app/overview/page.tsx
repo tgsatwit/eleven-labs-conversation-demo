@@ -17,18 +17,28 @@ export default function Overview() {
   return (
     <div className="flex-1 max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
       <h1 className="text-3xl font-bold mb-6">Full Application Overview</h1>
-      
-      <div className={`p-4 mb-8 rounded-lg ${
-        theme === 'dark' ? 'bg-gray-800/50' : 'bg-blue-50'
-      }`}>
-        <p className="text-sm">
-          The Gestalt Language Coach is a comprehensive digital platform designed to assist parents, specialists, 
-          and caregivers in supporting and enhancing a childs language development through targeted guidance, 
-          collaborative tools, and advanced AI-driven insights.
-        </p>
+      <Section title="">
+          <div className="space-y-4">
+          <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+            The Gestalt Language Coach is a comprehensive digital platform designed to assist parents, specialists, 
+            and caregivers in supporting and enhancing a childs language development through targeted guidance, 
+            collaborative tools, and advanced AI-driven insights.
+          </p>
+        </div>
+      </Section>
+
+      <div className="mb-8" style={{ position: 'relative', overflow: 'hidden', aspectRatio: '1920/1080' }}>
+        <iframe 
+          src="https://share.synthesia.io/embeds/videos/1724e132-d5cc-43cf-844a-f45264040848" 
+          loading="lazy" 
+          title="Synthesia video player - Supporting Parents Beyond Therapy Sessions" 
+          allowFullScreen 
+          allow="encrypted-media; fullscreen;" 
+          style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0, border: 'none', padding: 0, margin: 0, overflow: 'hidden' }}
+        ></iframe>
       </div>
 
-      <Section title="Core Motivation">
+      <Section title="Our Core Motivation">
         <div className="space-y-4">
           <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
             Our platform addresses the critical need for accessible, continuous, and individualized support 
@@ -44,7 +54,7 @@ export default function Overview() {
         </div>
       </Section>
 
-      <Section title="Core Features">
+      <Section title="Gestalts Core Features">
         <div className="space-y-4">
           <div>
             <h3 className="font-medium mb-2">AI-Driven Coaching and Analysis</h3>

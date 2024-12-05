@@ -14,9 +14,9 @@ interface Session {
 export default function PastCoachSessions() {
   const { theme } = useTheme();
   const [sessions] = useState<Session[]>([
-    { id: '1', title: "What is the meaning of life?", date: "19 Nov", messages: 4 },
-    { id: '2', title: "Can you help me with my homework?", date: "18 Nov", messages: 6 },
-    { id: '3', title: "Write a poem about spring", date: "17 Nov", messages: 3 }
+    { id: '1', title: "Help me explain Gestalt Processors to my mum", date: "19 Nov", messages: 4 },
+    { id: '2', title: "Is it normal for my child to repeat sentences over and over?", date: "18 Nov", messages: 6 },
+    { id: '3', title: "How can i get my child to speak to me?", date: "17 Nov", messages: 3 }
   ]);
 
   const handleSessionClick = (sessionId: string) => {
