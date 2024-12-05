@@ -15,8 +15,8 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col w-full min-h-screen">
-      <div className="flex-1 flex flex-col items-center justify-center p-4 pb-16 lg:-mt-12">
+    <div className="flex flex-col w-full min-h-screen relative z-0">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 lg:-mt-4">
         <div className="mb-6">
           <Image
             src="/logo512.png"
@@ -30,15 +30,27 @@ export default function Home() {
           Gestalts Language Coach Demo
         </h1>
         <p
-          className={`text-center max-w-2xl mb-16 ${
+          className={`text-center max-w-2xl mb-8 ${
             theme === "dark" ? "text-gray-300" : "text-gray-600"
           }`}
         >
           This demo showcases the AI-powered features of our platform. Try out
           the Language Coach for real-time guidance or the Play Analyzer for
-          session feedback. For a full overview of the complete applications
-          capabilities, visit our overview page.
+          session feedback. For an overview of the complete application, watch the video below or visit our overview page.
         </p>
+
+        <button 
+          onClick={toggleModal}
+          className={`flex items-center justify-center w-full max-w-md mb-16 py-3 px-6 rounded-lg shadow-md transition-all duration-200 ${
+            theme === "dark"
+              ? "bg-white text-gray-900 hover:bg-gray-50"
+              : "bg-gray-800 text-white hover:bg-gray-700"
+          }`}
+        >
+          <Play className="w-6 h-6 mr-2" />
+          What is Gestalts?
+        </button>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full">
           <Link href="/coach" className="group h-full">
             <div
@@ -83,22 +95,22 @@ export default function Home() {
           </Link>
 
           <div
-            onClick={toggleModal}
-            className={`cursor-pointer rounded-lg p-6 transition-all duration-200 h-full flex flex-col items-center justify-center
-            ${
+            className={`cursor-pointer rounded-lg p-6 transition-all duration-200 h-full flex flex-col items-center justify-center border-2 ${
               theme === "dark"
-                ? "bg-gray-800 hover:bg-gray-700"
-                : "bg-white hover:bg-gray-50 shadow-md"
+                ? "border-gray-800 text-gray-300 hover:bg-gray-800"
+                : "border-gray-200 text-gray-600 hover:bg-gray-50"
             }`}
           >
-            <Play className="w-12 h-12 mb-4 text-gray-500 dark:text-gray-300" />
-            <h2 className="text-xl font-semibold mb-4">Watch Overview</h2>
-            <p
-              className={`text-sm mb-2 text-center ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+            <Link
+              href="/overview"
+              className={`text-sm transition-colors ${
+                theme === "dark"
+                  ? "hover:text-white"
+                  : "hover:text-gray-900"
+              }`}
             >
-              Watch a brief video overview of the Gestalt Language Coach to
-              understand its features and benefits.
-            </p>
+              Learn More: <br />Full Application Overview →
+            </Link>
           </div>
         </div>
 
@@ -106,17 +118,6 @@ export default function Home() {
           <p className="text-sm text-gray-400 mb-2">
             NB: Users are required to login to manage token usage.
           </p>
-          <Link
-            href="/overview"
-            className={`text-sm underline transition-colors
-              ${
-                theme === "dark"
-                  ? "text-gray-300 hover:text-gray-100"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-          >
-            Learn More: Full Application Overview →
-          </Link>
         </div>
       </div>
 
