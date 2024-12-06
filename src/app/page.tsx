@@ -89,7 +89,7 @@ export default function Home() {
               >
                 Live record or upload recordings of play sessions for detailed
                 analysis. Receive structured feedback on interaction patterns
-                and language development opportunities. (Desktop best in demo)
+                and language development opportunities. (Desktop best for demo)
               </p>
             </div>
           </Link>
